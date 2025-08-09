@@ -1,6 +1,5 @@
-streamlit
-google-api-python-client
+fastapi
+uvicorn[standard]
 google-auth
-google-auth-oauthlib
-mutagen
-requests
+google-api-python-client
+python-dotenv
