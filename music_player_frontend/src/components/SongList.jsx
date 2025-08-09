@@ -4,7 +4,7 @@ export default function SongList({ songs, currentIndex, onSelect, searchTerm, on
       <input
         type="text"
         placeholder="Search songs..."
-        className="w-full p-2 mb-3 rounded-full text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400"
+        className="w-full py-3 px-4 mb-3 rounded-full text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400 text-base"
         value={searchTerm}
         onChange={e => onSearch(e.target.value)}
       />
