@@ -13,7 +13,7 @@ function App() {
 
   // Fetch songs from backend
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/songs")
+    fetch("https://asrith-music-player.onrender.com/songs")
       .then((res) => res.json())
       .then((data) => setSongs(data))
       .catch((err) => console.error("Fetch error:", err));
