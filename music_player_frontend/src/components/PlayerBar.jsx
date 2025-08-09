@@ -54,19 +54,39 @@ export default function PlayerBar({
       </div>
       {/* Main Controls Centered, with Favorite to the right of Next */}
       <div className="flex items-center justify-center gap-4 mt-2 w-full">
-        <button onClick={onShuffle} className={`p-2 rounded-full border-2 ${shuffle ? "bg-green-500 border-green-400" : "bg-[#222] border-[#282828] hover:bg-green-900/30"} transition-colors`} title="Shuffle">
+        <button
+          onClick={onShuffle}
+          className={`p-2 rounded-full border-2 border-black bg-gray-100 hover:bg-gray-200 active:bg-black active:text-white transition-colors ${shuffle ? "ring-2 ring-green-400" : ""}`}
+          title="Shuffle"
+        >
           <Shuffle size={18} />
         </button>
-        <button onClick={onPrev} className="p-2 rounded-full bg-[#222] border border-[#282828] hover:bg-green-900/30 transition-colors" title="Previous">
+        <button
+          onClick={onPrev}
+          className="p-2 rounded-full border-2 border-black bg-gray-100 hover:bg-gray-200 active:bg-black active:text-white transition-colors"
+          title="Previous"
+        >
           <SkipBack size={18} />
         </button>
-        <button onClick={onPlayPause} className="p-4 rounded-full bg-green-500 hover:bg-green-400 shadow-lg flex justify-center items-center border-4 border-green-300/30 transition-all" title={isPlaying ? "Pause" : "Play"}>
+        <button
+          onClick={onPlayPause}
+          className="p-4 rounded-full border-2 border-black bg-gray-100 hover:bg-gray-200 active:bg-black active:text-white shadow-lg flex justify-center items-center transition-all"
+          title={isPlaying ? "Pause" : "Play"}
+        >
           {isPlaying ? <Pause size={22} /> : <Play size={22} />}
         </button>
-        <button onClick={onNext} className="p-2 rounded-full bg-[#222] border border-[#282828] hover:bg-green-900/30 transition-colors" title="Next">
+        <button
+          onClick={onNext}
+          className="p-2 rounded-full border-2 border-black bg-gray-100 hover:bg-gray-200 active:bg-black active:text-white transition-colors"
+          title="Next"
+        >
           <SkipForward size={18} />
         </button>
-        <button onClick={onLike} className={`p-2 rounded-full border-2 ${liked ? "bg-pink-500 border-pink-400" : "bg-[#222] border-[#282828] hover:bg-pink-900/30"} transition-colors`} title="Like">
+        <button
+          onClick={onLike}
+          className={`p-2 rounded-full border-2 border-black bg-gray-100 hover:bg-gray-200 active:bg-black active:text-white transition-colors ${liked ? "ring-2 ring-pink-400 bg-pink-500 text-white" : ""}`}
+          title="Like"
+        >
           <Heart size={18} fill={liked ? "#ec4899" : "none"} />
         </button>
       </div>
