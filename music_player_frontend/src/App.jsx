@@ -9,6 +9,8 @@ function App() {
   const [duration, setDuration] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [showSearchResults, setShowSearchResults] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+
   const audioRef = useRef(null);
 
   // Fetch songs from backend
@@ -19,20 +21,31 @@ function App() {
       .catch((err) => console.error("Fetch error:", err));
   }, []);
 
-  // Update progress & duration
+  // Update progress, duration & play state listeners on audio element
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
     const updateTime = () => setCurrentTime(audio.currentTime);
     const setTotalDuration = () => setDuration(audio.duration);
+    const onPlay = () => setIsPlaying(true);
+    const onPause = () => setIsPlaying(false);
 
     audio.addEventListener("timeupdate", updateTime);
     audio.addEventListener("loadedmetadata", setTotalDuration);
+    audio.addEventListener("play", onPlay);
+    audio.addEventListener("pause", onPause);
+
+    // Try to autoplay on song change (important for mobile)
+    audio.play().catch(() => {
+      // ignore errors like autoplay blocked
+    });
 
     return () => {
       audio.removeEventListener("timeupdate", updateTime);
       audio.removeEventListener("loadedmetadata", setTotalDuration);
+      audio.removeEventListener("play", onPlay);
+      audio.removeEventListener("pause", onPause);
     };
   }, [currentIndex]);
 
@@ -139,7 +152,7 @@ function App() {
             <audio
               ref={audioRef}
               autoPlay
-              src={`http://127.0.0.1:8000/stream/${songs[currentIndex]?.id}`}
+              src={`https://asrith-music-player.onrender.com/stream/${songs[currentIndex]?.id}`}
               onEnded={handleSongEnd}
             />
 
@@ -150,7 +163,7 @@ function App() {
             >
               <div
                 className="h-full bg-green-500 rounded-full"
-                style={{ width: `${(currentTime / duration) * 100}%` }}
+                style={{ width: duration ? `${(currentTime / duration) * 100}%` : "0%" }}
               />
             </div>
 
@@ -180,11 +193,7 @@ function App() {
                 onClick={togglePlayPause}
                 className="p-4 rounded-full bg-green-500 hover:bg-green-400 flex justify-center items-center"
               >
-                {audioRef.current && !audioRef.current.paused ? (
-                  <Pause size={24} />
-                ) : (
-                  <Play size={24} />
-                )}
+                {isPlaying ? <Pause size={24} /> : <Play size={24} />}
               </button>
               <button
                 onClick={playNext}
