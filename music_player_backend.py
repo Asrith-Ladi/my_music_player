@@ -34,13 +34,36 @@ def get_drive_service():
     )
     return build("drive", "v3", credentials=creds)
 
+def list_files_recursively(service, folder_id):
+    all_files = []
+    # Query for audio files directly inside the folder
+    query_files = f"'{folder_id}' in parents and mimeType contains 'audio/' and trashed = false"
+    results_files = service.files().list(q=query_files, fields="files(id, name)").execute()
+    all_files.extend(results_files.get("files", []))
+    
+    # Query for subfolders inside the folder
+    query_folders = f"'{folder_id}' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false"
+    results_folders = service.files().list(q=query_folders, fields="files(id)").execute()
+    
+    for folder in results_folders.get("files", []):
+        subfolder_files = list_files_recursively(service, folder["id"])
+        all_files.extend(subfolder_files)
+        
+    return all_files
+
+# @app.get("/songs")
+# def list_songs():
+#     service = get_drive_service()
+#     query = f"'{FOLDER_ID}' in parents and mimeType contains 'audio/'"
+#     results = service.files().list(q=query, fields="files(id, name)").execute()
+#     files = results.get("files", [])
+#     return files
 @app.get("/songs")
 def list_songs():
     service = get_drive_service()
-    query = f"'{FOLDER_ID}' in parents and mimeType contains 'audio/'"
-    results = service.files().list(q=query, fields="files(id, name)").execute()
-    files = results.get("files", [])
-    return files
+    all_songs = list_files_recursively(service, FOLDER_ID)
+    return all_songs
+
 
 @app.get("/stream/{file_id}")
 def stream_file(file_id: str):
