@@ -62,6 +62,18 @@ export default function PlayerBar({
         >
           <Shuffle size={18} />
         </button>
+        {/* <button
+            onClick={onShuffle}
+            className={`p-2 rounded-full border-2 border-black bg-gray-100 hover:bg-gray-200 active:bg-black active:text-white transition-colors ${shuffle ? "ring-2 ring-green-400" : ""}`}
+            title="Shuffle"
+            style={{
+                color: shuffle ? '#22c55e' : 'white', // green color when active
+                fontWeight: shuffle ? 'bold' : 'normal',
+                marginRight: '8px'
+            }}
+            >
+            Shuffle
+            </button> */}
         <button
           onClick={onPrev}
           className="p-2 rounded-full border-2 border-black bg-gray-100 hover:bg-gray-200 active:bg-black active:text-white transition-colors"
