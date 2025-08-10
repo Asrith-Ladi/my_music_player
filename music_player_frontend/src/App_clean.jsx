@@ -1,5 +1,3 @@
-document.head.appendChild(fontLink);
-// ...All code from App_clean.jsx (fully cleaned and working version)...
 import { useEffect, useState, useRef } from "react";
 import PlayerBar from "./components/PlayerBar";
 import SongInfo from "./components/SongInfo";
