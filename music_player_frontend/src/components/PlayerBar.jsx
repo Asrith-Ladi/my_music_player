@@ -53,11 +53,12 @@ export default function PlayerBar({
         </div>
       </div>
       {/* Main Controls Centered, with Favorite to the right of Next */}
-      <div className="flex items-center justify-center gap-4 mt-2 w-full">
+      <div className="flex items-center justify-center gap-2 mt-2 w-full">
         <button
           onClick={onShuffle}
           className={`p-2 rounded-full border-2 border-black bg-gray-100 hover:bg-gray-200 active:bg-black active:text-white transition-colors ${shuffle ? "ring-2 ring-green-400" : ""}`}
           title="Shuffle"
+          style={{ marginRight: '8px' }}
         >
           <Shuffle size={18} />
         </button>
@@ -65,6 +66,7 @@ export default function PlayerBar({
           onClick={onPrev}
           className="p-2 rounded-full border-2 border-black bg-gray-100 hover:bg-gray-200 active:bg-black active:text-white transition-colors"
           title="Previous"
+          style={{ marginRight: '8px' }}
         >
           <SkipBack size={18} />
         </button>
@@ -72,6 +74,7 @@ export default function PlayerBar({
           onClick={onPlayPause}
           className="p-4 rounded-full border-2 border-black bg-gray-100 hover:bg-gray-200 active:bg-black active:text-white shadow-lg flex justify-center items-center transition-all"
           title={isPlaying ? "Pause" : "Play"}
+          style={{ marginRight: '8px' }}
         >
           {isPlaying ? <Pause size={22} /> : <Play size={22} />}
         </button>
@@ -79,6 +82,7 @@ export default function PlayerBar({
           onClick={onNext}
           className="p-2 rounded-full border-2 border-black bg-gray-100 hover:bg-gray-200 active:bg-black active:text-white transition-colors"
           title="Next"
+          style={{ marginRight: '8px' }}
         >
           <SkipForward size={18} />
         </button>
@@ -91,7 +95,7 @@ export default function PlayerBar({
         </button>
       </div>
       {/* Volume Controls Below */}
-      <div className="flex items-center justify-center gap-4 mt-3 w-full">
+      <div className="flex items-center justify-center gap-4 w-full" style={{ marginTop: '6px' }}>
         <div className="flex items-center gap-1">
           <button onClick={() => onVolumeChange(volume === 0 ? 1 : 0)} className="text-gray-400">
             {volume === 0 ? <VolumeX size={18} /> : <Volume2 size={18} />}

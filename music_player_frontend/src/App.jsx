@@ -1,4 +1,35 @@
 import { useEffect, useState, useRef } from "react";
+// ThemeButton for customizable theme toggles
+// Customizable size for all theme buttons and color picker
+const THEME_BUTTON_SIZE = 38;
+const THEME_BUTTON_GAP = 14;
+function ThemeButton({ active, onClick, children, width = THEME_BUTTON_SIZE * 2.1, height = THEME_BUTTON_SIZE, fontSize = 16, style = {} }) {
+  return (
+    <button
+      onClick={onClick}
+      aria-pressed={active}
+      style={{
+        width,
+        height,
+        fontSize,
+        margin: 0,
+        borderRadius: 9999,
+        border: `2px solid ${active ? '#22c55e' : '#d1d5db'}`,
+        background: active ? '#22c55e' : '#f3f4f6',
+        color: active ? '#fff' : '#222',
+        fontWeight: 600,
+        boxShadow: active ? '0 2px 8px #22c55e44' : 'none',
+        transition: 'all 0.2s',
+        cursor: 'pointer',
+        outline: 'none',
+        display: 'inline-block',
+        ...style,
+      }}
+    >
+      {children}
+    </button>
+  );
+}
 import './App.css';
 
 import PlayerBar from "./components/PlayerBar";
@@ -137,34 +168,59 @@ function App() {
       }}
     >
       {/* Theme Toggle Top-Right */}
-      <div className="absolute top-4 right-4 z-50">
-        <div className="flex gap-2 items-center bg-white/80 dark:bg-black/80 rounded-full p-1 shadow-lg">
-          <button
-            className={`px-4 py-1 rounded-full font-semibold transition-colors border-2 ${theme === 'light' ? 'bg-green-400 text-white border-green-500 shadow' : 'bg-gray-200 text-gray-700 border-gray-300 hover:bg-green-100'}`}
+      <div
+        style={{
+          position: 'fixed',
+          top: THEME_BUTTON_GAP,
+          right: THEME_BUTTON_GAP,
+          zIndex: 50,
+        }}
+      >
+        <div
+          className="flex items-center bg-white/80 dark:bg-black/80 rounded-full p-1 shadow-lg"
+          style={{ gap: THEME_BUTTON_GAP, padding: THEME_BUTTON_GAP / 2 }}
+        >
+          <ThemeButton
+            active={theme === 'light'}
             onClick={() => setTheme('light')}
-            aria-pressed={theme === 'light'}
+            style={{}}
           >
             Light
-          </button>
-          <button
-            className={`px-4 py-1 rounded-full font-semibold transition-colors border-2 ${theme === 'dark' ? 'bg-green-400 text-white border-green-500 shadow' : 'bg-gray-200 text-gray-700 border-gray-300 hover:bg-green-100'}`}
+          </ThemeButton>
+          <ThemeButton
+            active={theme === 'dark'}
             onClick={() => setTheme('dark')}
-            aria-pressed={theme === 'dark'}
+            style={{}}
           >
             Dark
-          </button>
+          </ThemeButton>
           {/* Color Picker for Light Theme */}
           {theme === 'light' && (
-            <label className="flex items-center gap-1 ml-2 cursor-pointer">
-              <span className="text-xs text-gray-700">Pick color:</span>
+            <button
+              className="flex items-center gap-2 rounded-full font-semibold transition-colors border-2 bg-gray-200 text-gray-700 border-gray-300 hover:bg-green-100 shadow"
+              style={{
+                minWidth: 0,
+                alignItems: 'center',
+                display: 'inline-flex',
+                height: THEME_BUTTON_SIZE,
+                fontSize: 16,
+                borderRadius: 9999,
+                padding: `0 ${THEME_BUTTON_SIZE / 2}px`,
+                gap: 8,
+              }}
+              title="Pick theme color"
+              tabIndex={0}
+            >
+              <span className="text-xs" style={{ lineHeight: '1.5rem' }}>Theme Color</span>
               <input
                 type="color"
                 value={lightColor}
                 onChange={e => setLightColor(e.target.value)}
-                className="w-6 h-6 p-0 border-0 bg-transparent cursor-pointer"
-                title="Choose main light color"
+                className="w-4 h-4 p-0 border-0 bg-transparent cursor-pointer"
+                style={{ minWidth: 0, marginTop: '2px', height: THEME_BUTTON_SIZE - 10, width: THEME_BUTTON_SIZE - 10 }}
+                title="Choose theme color"
               />
-            </label>
+            </button>
           )}
         </div>
       </div>

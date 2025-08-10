@@ -1,4 +1,11 @@
 export default function SongInfo({ song, stroke }) {
+  // Extract main song name: remove leading track number and trailing site/extension
+  let displayName = song?.name || "No song selected";
+  // Remove leading track number and dash (e.g., '04 - ')
+  displayName = displayName.replace(/^\s*\d+\s*-\s*/, "");
+  // Remove trailing ' - SenSongsMp3.Co.mp3' or similar
+  displayName = displayName.replace(/\s*-\s*SenSongsMp3\.Co\.mp3$/i, "");
+
   return (
     <div className="flex items-center gap-4 w-full mb-6">
       <div className="flex-1 min-w-0">
@@ -13,7 +20,7 @@ export default function SongInfo({ song, stroke }) {
             color: '#111',
           } : { fontFamily: 'Aptos, Arial, sans-serif' }}
         >
-          <h2>{song?.name || "No song selected"}</h2>
+          <h2>{displayName}</h2>
         </div>
         <div className="text-gray-400 text-xs truncate max-w-[180px]" style={{ fontFamily: 'Aptos, Arial, sans-serif' }}>
           {/* {song?.artist || "Unknown Artist"} */}
