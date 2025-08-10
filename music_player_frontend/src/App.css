@@ -57,3 +57,11 @@ body, html, #root {
 .read-the-docs {
   color: #888;
 }
+.search-input {
+  width: 100%;
+  padding: 0.5rem;
+  padding-left: 2.5rem; /* for icon spacing */
+  border-radius: 9999px;
+  border: 1px solid #ccc;
+  outline: none;
+}
