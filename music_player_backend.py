@@ -1,81 +1,101 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
-from googleapiclient.http import MediaIoBaseDownload
-from fastapi.responses import StreamingResponse
+from google.auth.transport.requests import Request as GoogleAuthRequest
+import os
 import io
+import requests
 from dotenv import load_dotenv
+
+# Load variables from .env
 load_dotenv()
-
-
 app = FastAPI()
 
-# Allow React frontend to call API
+# Allow frontend calls
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # allow all origins for testing
+    allow_origins=["*"],  # In production: set your frontend domain
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-import os
 
-# Constants
+# Cache directory
+CACHE_DIR = "/tmp/song_cache"
+os.makedirs(CACHE_DIR, exist_ok=True)
 
-SERVICE_ACCOUNT_FILE = os.getenv("GOOGLE_APPLICATION_CREDENTIALS") 
-# Put your service account file in the same folder
 FOLDER_ID = os.getenv("FOLDER_ID")
-SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
+
 
 def get_drive_service():
     creds = service_account.Credentials.from_service_account_file(
-        SERVICE_ACCOUNT_FILE, scopes=SCOPES
+        os.getenv("GOOGLE_APPLICATION_CREDENTIALS"),
+        scopes=["https://www.googleapis.com/auth/drive"]
     )
+    if creds.expired:
+        creds.refresh(GoogleAuthRequest())
     return build("drive", "v3", credentials=creds)
 
-def list_files_recursively(service, folder_id):
-    all_files = []
-    # Query for audio files directly inside the folder
-    query_files = f"'{folder_id}' in parents and mimeType contains 'audio/' and trashed = false"
-    results_files = service.files().list(q=query_files, fields="files(id, name)").execute()
-    all_files.extend(results_files.get("files", []))
-    
-    # Query for subfolders inside the folder
-    query_folders = f"'{folder_id}' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false"
-    results_folders = service.files().list(q=query_folders, fields="files(id)").execute()
-    
-    for folder in results_folders.get("files", []):
-        subfolder_files = list_files_recursively(service, folder["id"])
-        all_files.extend(subfolder_files)
-        
-    return all_files
 
-# @app.get("/songs")
-# def list_songs():
-#     service = get_drive_service()
-#     query = f"'{FOLDER_ID}' in parents and mimeType contains 'audio/'"
-#     results = service.files().list(q=query, fields="files(id, name)").execute()
-#     files = results.get("files", [])
-#     return files
+def list_files_recursively(service, folder_id):
+    songs = []
+    page_token = None
+    while True:
+        response = service.files().list(
+            q=f"'{folder_id}' in parents and mimeType='audio/mpeg'",
+            spaces="drive",
+            fields="nextPageToken, files(id, name)",
+            pageToken=page_token
+        ).execute()
+        for file in response.get("files", []):
+            songs.append({"id": file["id"], "name": file["name"]})
+        page_token = response.get("nextPageToken", None)
+        if page_token is None:
+            break
+    return songs
+
+
 @app.get("/songs")
 def list_songs():
     service = get_drive_service()
-    all_songs = list_files_recursively(service, FOLDER_ID)
-    return all_songs
+    return list_files_recursively(service, FOLDER_ID)
+
+
+def fast_stream_from_drive(file_id):
+    """Streams directly from Drive (fast start) while saving to cache."""
+    service = get_drive_service()
+    file = service.files().get(fileId=file_id, fields="name").execute()
+    download_url = f"https://www.googleapis.com/drive/v3/files/{file_id}?alt=media"
+
+    headers = {"Authorization": f"Bearer {service._http.credentials.token}"}
+    cache_path = os.path.join(CACHE_DIR, f"{file_id}.mp3")
+
+    with requests.get(download_url, headers=headers, stream=True) as r:
+        r.raise_for_status()
+        with open(cache_path, "wb") as cache_file:
+            for chunk in r.iter_content(chunk_size=1024 * 256):  # 256KB chunks
+                if chunk:
+                    cache_file.write(chunk)
+                    yield chunk
 
 
 @app.get("/stream/{file_id}")
-def stream_file(file_id: str):
-    service = get_drive_service()
-    request = service.files().get_media(fileId=file_id)
-    fh = io.BytesIO()
-    downloader = MediaIoBaseDownload(fh, request)
-    done = False
-    while not done:
-        status, done = downloader.next_chunk()
-    fh.seek(0)
-    return StreamingResponse(fh, media_type="audio/mpeg")
+def stream_song(file_id: str):
+    try:
+        cached_file_path = os.path.join(CACHE_DIR, f"{file_id}.mp3")
+
+        # Serve from cache if exists
+        if os.path.exists(cached_file_path):
+            return StreamingResponse(open(cached_file_path, "rb"), media_type="audio/mpeg")
+
+        # Otherwise stream from Google Drive instantly and cache
+        return StreamingResponse(fast_stream_from_drive(file_id), media_type="audio/mpeg")
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/health")
 def health_check():

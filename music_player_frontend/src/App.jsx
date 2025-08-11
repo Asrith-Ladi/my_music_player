@@ -31,7 +31,7 @@ function App() {
 
   // Fetch songs
   useEffect(() => {
-    fetch("https://asrith-music-player.onrender.com/songs")
+    fetch("https://asrith-music-player.onrender.com//songs")
       .then(res => res.json())
       .then(data => setSongs(data))
       .catch(err => console.error(err));
