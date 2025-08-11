@@ -44,15 +44,35 @@ function App() {
 
   const onPlay = () => setIsPlaying(true);
   const onPause = () => setIsPlaying(false);
+  const onLoadedMetadata = () => {
+    if (audio.duration && Number.isFinite(audio.duration)) {
+      setDuration(audio.duration);
+    } else {
+      setDuration(0);
+    }
+  };
+  const onTimeUpdate = () => {
+    setCurrentTime(audio.currentTime);
+  };
 
   audio.addEventListener("play", onPlay);
   audio.addEventListener("pause", onPause);
+  audio.addEventListener("loadedmetadata", onLoadedMetadata);
+  audio.addEventListener("timeupdate", onTimeUpdate);
 
   return () => {
     audio.removeEventListener("play", onPlay);
     audio.removeEventListener("pause", onPause);
+    audio.removeEventListener("loadedmetadata", onLoadedMetadata);
+    audio.removeEventListener("timeupdate", onTimeUpdate);
   };
 }, [audioRef, currentIndex]);
+
+
+// useEffect(() => {
+//   setDuration(0);
+//   setCurrentTime(0);
+// }, [currentIndex]);
 
 
   useEffect(() => {
@@ -155,6 +175,15 @@ function App() {
         src={songs[currentIndex] ? `https://asrith-music-player.onrender.com/stream/${songs[currentIndex]?.id}` : undefined}
         onEnded={playNext}
       />
+      {/* {songs.length > 0 && (
+  <audio
+    ref={audioRef}
+    autoPlay
+    src={`https://asrith-music-player.onrender.com/stream/${songs[currentIndex].id}`}
+    onEnded={playNext}
+  />
+)} */}
+
 
       <PlayerBar
         isPlaying={isPlaying}

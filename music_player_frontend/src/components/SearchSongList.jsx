@@ -205,21 +205,22 @@ export default function SearchSongList({ songs, onSelect }) {
               />
               {searchTerm && (
                 <button
-                  onClick={() => setSearchTerm("")}
-                  aria-label="Clear search"
-                  type="button"
-                  style={{
-                    marginLeft: "12px",
+                onClick={() => setSearchTerm("")}
+                aria-label="Clear search"
+                type="button"
+                style={{
+                    marginLeft: "20px",
                     border: "none",
                     background: "none",
-                    color: "#555",
+                    color: "black",  // darker gray, more visible on light bg
                     fontWeight: "bold",
                     cursor: "pointer",
                     fontSize: "18px",
                     lineHeight: 1,
-                  }}
+                    padding: "0 6px",  // add some clickable area
+                }}
                 >
-                  ✕
+                ✕
                 </button>
               )}
             </div>
