@@ -76,3 +76,7 @@ def stream_file(file_id: str):
         status, done = downloader.next_chunk()
     fh.seek(0)
     return StreamingResponse(fh, media_type="audio/mpeg")
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
