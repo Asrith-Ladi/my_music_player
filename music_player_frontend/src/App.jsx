@@ -15,7 +15,7 @@ function formatTime(seconds) {
 function App() {
   const [songs, setSongs] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState('light');
   const [lightColor, setLightColor] = useState('#a7f3d0');
   const [shuffle, setShuffle] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
