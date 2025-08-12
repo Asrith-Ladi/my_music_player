@@ -115,9 +115,9 @@ export default function SearchSongList({ songs, onSelect }) {
         onClick={() => setIsModalOpen(true)}
         style={{
           position: "fixed",
-          top: "70px",
+          top: "13%",
           left: "50%",
-          width: "280px",
+          width: "250px",
           maxWidth: "90vw",
           transform: "translateX(-140px)",
           zIndex: 1000,
@@ -176,7 +176,7 @@ export default function SearchSongList({ songs, onSelect }) {
               style={{
                 display: "flex",
                 alignItems: "center",
-                padding: "10px 16px",
+                padding: "12px 16px",
                 borderRadius: "30px",
                 border: "2px solid #22c55e",
                 backgroundColor: "white",

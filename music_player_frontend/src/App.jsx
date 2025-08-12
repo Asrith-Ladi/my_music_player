@@ -4,7 +4,7 @@ import PlayerBar from "./components/PlayerBar";
 import SongInfo from "./components/SongInfo";
 import SearchSongList from "./components/SearchSongList";
 import ThemeSwitcher from "./components/ThemeSwitcher";
-import ThemeBackground from "./components/ThemeBackground";
+import ThemeBackground from "./components/ThemeBg";
 import ProgressBar from "./components/ProgressBar";
 
 function formatTime(seconds) {
@@ -64,36 +64,113 @@ function App() {
     };
   }, [audioRef, currentIndex]);
 
+  // ---- SEEKING ----
+  const handleSeek = (time) => {
+    const audio = audioRef.current;
+    if (audio && !isNaN(audio.duration)) {
+      audio.currentTime = time;
+      setCurrentTime(time);
+    }
+  };
+  const [isSeeking, setIsSeeking] = useState(false);
+  const [seekValue, setSeekValue] = useState(0);
+
+  const handleSeekStart = () => {
+    setIsSeeking(true);
+  };
+
+  const handleSeekChange = (value) => {
+    setSeekValue(value);
+  };
+
+  const handleSeekEnd = (value) => {
+    setIsSeeking(false);
+    if (audioRef.current) {
+      audioRef.current.currentTime = value;
+    }
+  };
+
+  // Update slider when not dragging
+  useEffect(() => {
+    if (!isSeeking) {
+      setSeekValue(currentTime);
+    }
+  }, [currentTime, isSeeking]);
+
+
+  // ---- PLAY / PAUSE ----
+  const handlePlayPause = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (audio.paused) {
+      audio.play();
+    } else {
+      audio.pause();
+    }
+    };
+
+  // ---- NEXT / PREVIOUS ----
   const playNext = () => {
-    setCurrentIndex((prev) =>
+    setCurrentIndex(prev =>
       shuffle
         ? Math.floor(Math.random() * songs.length)
         : (prev + 1) % songs.length
     );
     setLiked(false);
+    setTimeout(() => audioRef.current?.play(), 100);
   };
 
   const playPrevious = () => {
-    setCurrentIndex((prev) =>
+    setCurrentIndex(prev =>
       shuffle
         ? Math.floor(Math.random() * songs.length)
         : (prev - 1 + songs.length) % songs.length
     );
     setLiked(false);
+    setTimeout(() => audioRef.current?.play(), 100);
   };
 
-  const handleSeek = (time) => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = time;
-      setCurrentTime(time);
+  useEffect(() => {
+  if ("mediaSession" in navigator && songs.length > 0) {
+    const currentSong = songs[currentIndex];
+
+    // Set metadata for lock screen / notification
+    navigator.mediaSession.metadata = new window.MediaMetadata({
+      title: currentSong.name || "Unknown Title",
+      artist: "Asrith's Playlist",
+      album: "",
+      artwork: [
+        { src: "/cover.png", sizes: "512x512", type: "image/png" }
+      ]
+    });
+
+    // Handle lock screen controls
+    navigator.mediaSession.setActionHandler("play", () => {
+      audioRef.current?.play();
+    });
+    navigator.mediaSession.setActionHandler("pause", () => {
+      audioRef.current?.pause();
+    });
+    navigator.mediaSession.setActionHandler("nexttrack", () => {
+      playNext();
+    });
+    navigator.mediaSession.setActionHandler("previoustrack", () => {
+      playPrevious();
+    });
+  }
+  }, [currentIndex, songs]);
+
+  // ---- JSX ----
+  <audio
+    ref={audioRef}
+    autoPlay
+    src={
+      songs[currentIndex]
+        ? `https://asrith-music-player.onrender.com/stream/${songs[currentIndex]?.id}`
+        : undefined
     }
-  };
-
-  const handlePlayPause = () => {
-    if (!audioRef.current) return;
-    if (audioRef.current.paused) audioRef.current.play();
-    else audioRef.current.pause();
-  };
+    onEnded={playNext}
+  />
 
   const handleVolumeChange = (v) => {
     setVolume(v);
@@ -142,7 +219,6 @@ function App() {
           duration={duration}
           onSeek={handleSeek}
         />
-        
         {/* Song Info */}
         <SongInfo song={songs[currentIndex]} />
 
