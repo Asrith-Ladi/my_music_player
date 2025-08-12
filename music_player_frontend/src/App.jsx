@@ -5,6 +5,7 @@ import SongInfo from "./components/SongInfo";
 import SearchSongList from "./components/SearchSongList";
 import ThemeSwitcher from "./components/ThemeSwitcher";
 import ThemeBackground from "./components/ThemeBackground";
+import ProgressBar from "./components/ProgressBar";
 
 function formatTime(seconds) {
   if (isNaN(seconds)) return "0:00";
@@ -136,26 +137,12 @@ function App() {
           onSelect={handleSongSelect}
         />
 
-        {/* Progress Bar */}
-        <input
-          type="range"
-          min={0}
-          max={duration || 0}
-          step={0.1}
-          value={currentTime}
-          onChange={(e) => handleSeek(Number(e.target.value))}
-          className="w-full max-w-md mt-40 h-2 rounded-full cursor-pointer"
-          style={{
-            background: `linear-gradient(to right, #3b82f6 ${
-              duration ? (currentTime / duration) * 100 : 0
-            }%, #555 ${duration ? (currentTime / duration) * 100 : 0}%)`,
-          }}
+        <ProgressBar
+          currentTime={currentTime}
+          duration={duration}
+          onSeek={handleSeek}
         />
-        <div className="flex justify-between w-full max-w-md text-sm mt-1 text-white">
-          <span>{formatTime(currentTime)}</span>
-          <span>{formatTime(duration)}</span>
-        </div>
-
+        
         {/* Song Info */}
         <SongInfo song={songs[currentIndex]} />
 
