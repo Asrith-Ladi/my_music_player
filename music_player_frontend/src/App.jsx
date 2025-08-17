@@ -1,3 +1,4 @@
+// src/App.jsx
 import { useState, useRef, useEffect } from "react";
 import "./App.css";
 import PlayerBar from "./components/PlayerBar";
@@ -6,15 +7,9 @@ import SearchSongList from "./components/SearchSongList";
 import ThemeSwitcher from "./components/ThemeSwitcher";
 import ThemeBackground from "./components/ThemeBg";
 import ProgressBar from "./components/ProgressBar";
+import ModeToggle from "./components/ModeToggle";
 
-function formatTime(seconds) {
-  if (isNaN(seconds)) return "0:00";
-  const m = Math.floor(seconds / 60);
-  const s = Math.floor(seconds % 60);
-  return `${m}:${s < 10 ? "0" : ""}${s}`;
-}
-
-function App() {
+export default function App() {
   const [songs, setSongs] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [theme, setTheme] = useState("light");
@@ -25,30 +20,35 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(1);
   const [liked, setLiked] = useState(false);
+  const [mode, setMode] = useState("online");
+  const [isSeeking, setIsSeeking] = useState(false);
+  const [seekValue, setSeekValue] = useState(0);
   const audioRef = useRef(null);
 
-  // Background gradients
   const darkGradient = "linear-gradient(135deg, #232526, #414345, #181818)";
   const lightGradient = `linear-gradient(135deg, #d1fae5, ${lightColor}, #6ee7b7)`;
 
-  // Fetch songs
+  // Fetch songs whenever mode changes
   useEffect(() => {
-    fetch("https://asrith-music-player.onrender.com/songs")
-      .then((res) => res.json())
-      .then((data) => setSongs(data))
-      .catch((err) => console.error(err));
-  }, []);
+    if (mode === "online") {
+      fetch("https://asrith-music-player.onrender.com/songs")
+        .then((res) => res.json())
+        .then((data) => setSongs(data))
+        .catch((err) => console.error("❌ Online fetch failed:", err));
+    } else {
+      setSongs([]); // placeholder until offline is finalized
+    }
+  }, [mode]);
 
-  // Audio events
+  // Audio element events
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
     const onPlay = () => setIsPlaying(true);
     const onPause = () => setIsPlaying(false);
-    const onLoadedMetadata = () => {
+    const onLoadedMetadata = () =>
       setDuration(Number.isFinite(audio.duration) ? audio.duration : 0);
-    };
     const onTimeUpdate = () => setCurrentTime(audio.currentTime);
 
     audio.addEventListener("play", onPlay);
@@ -62,56 +62,11 @@ function App() {
       audio.removeEventListener("loadedmetadata", onLoadedMetadata);
       audio.removeEventListener("timeupdate", onTimeUpdate);
     };
-  }, [audioRef, currentIndex]);
+  }, [currentIndex]);
 
-  // ---- SEEKING ----
-  const handleSeek = (time) => {
-    const audio = audioRef.current;
-    if (audio && !isNaN(audio.duration)) {
-      audio.currentTime = time;
-      setCurrentTime(time);
-    }
-  };
-  const [isSeeking, setIsSeeking] = useState(false);
-  const [seekValue, setSeekValue] = useState(0);
-
-  const handleSeekStart = () => {
-    setIsSeeking(true);
-  };
-
-  const handleSeekChange = (value) => {
-    setSeekValue(value);
-  };
-
-  const handleSeekEnd = (value) => {
-    setIsSeeking(false);
-    if (audioRef.current) {
-      audioRef.current.currentTime = value;
-    }
-  };
-
-  // Update slider when not dragging
-  useEffect(() => {
-    if (!isSeeking) {
-      setSeekValue(currentTime);
-    }
-  }, [currentTime, isSeeking]);
-
-
-  // ---- PLAY / PAUSE ----
-  const handlePlayPause = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    if (audio.paused) {
-      audio.play();
-    } else {
-      audio.pause();
-    }
-    };
-
-  // ---- NEXT / PREVIOUS ----
+  // Controls
   const playNext = () => {
-    setCurrentIndex(prev =>
+    setCurrentIndex((prev) =>
       shuffle
         ? Math.floor(Math.random() * songs.length)
         : (prev + 1) % songs.length
@@ -121,7 +76,7 @@ function App() {
   };
 
   const playPrevious = () => {
-    setCurrentIndex(prev =>
+    setCurrentIndex((prev) =>
       shuffle
         ? Math.floor(Math.random() * songs.length)
         : (prev - 1 + songs.length) % songs.length
@@ -130,47 +85,32 @@ function App() {
     setTimeout(() => audioRef.current?.play(), 100);
   };
 
-  useEffect(() => {
-  if ("mediaSession" in navigator && songs.length > 0) {
-    const currentSong = songs[currentIndex];
-
-    // Set metadata for lock screen / notification
-    navigator.mediaSession.metadata = new window.MediaMetadata({
-      title: currentSong.name || "Unknown Title",
-      artist: "Asrith's Playlist",
-      album: "",
-      artwork: [
-        { src: "/cover.png", sizes: "512x512", type: "image/png" }
-      ]
-    });
-
-    // Handle lock screen controls
-    navigator.mediaSession.setActionHandler("play", () => {
-      audioRef.current?.play();
-    });
-    navigator.mediaSession.setActionHandler("pause", () => {
-      audioRef.current?.pause();
-    });
-    navigator.mediaSession.setActionHandler("nexttrack", () => {
-      playNext();
-    });
-    navigator.mediaSession.setActionHandler("previoustrack", () => {
-      playPrevious();
-    });
-  }
-  }, [currentIndex, songs]);
-
-  // ---- JSX ----
-  <audio
-    ref={audioRef}
-    autoPlay
-    src={
-      songs[currentIndex]
-        ? `https://asrith-music-player.onrender.com/stream/${songs[currentIndex]?.id}`
-        : undefined
+  const handleSeek = (time) => {
+    const audio = audioRef.current;
+    if (audio && !isNaN(audio.duration)) {
+      audio.currentTime = time;
+      setCurrentTime(time);
     }
-    onEnded={playNext}
-  />
+  };
+
+  const handleSeekStart = () => setIsSeeking(true);
+  const handleSeekChange = (value) => setSeekValue(value);
+  const handleSeekEnd = (value) => {
+    setIsSeeking(false);
+    if (audioRef.current) {
+      audioRef.current.currentTime = value;
+    }
+  };
+
+  useEffect(() => {
+    if (!isSeeking) setSeekValue(currentTime);
+  }, [currentTime, isSeeking]);
+
+  const handlePlayPause = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.paused ? audio.play() : audio.pause();
+  };
 
   const handleVolumeChange = (v) => {
     setVolume(v);
@@ -179,15 +119,18 @@ function App() {
 
   const handleLike = () => setLiked((l) => !l);
 
-  const handleSongSelect = (filteredIndex) => {
-    if (filteredIndex < 0 || filteredIndex >= songs.length) return;
-    setCurrentIndex(filteredIndex);
+  const handleSongSelect = (index) => {
+    if (index < 0 || index >= songs.length) return;
+    setCurrentIndex(index);
     setLiked(false);
   };
 
   return (
     <>
-      {/* Background handler */}
+      {/* Mode Toggle */}
+      <ModeToggle mode={mode} setMode={setMode} />
+
+      {/* Background */}
       <ThemeBackground
         theme={theme}
         darkGradient={darkGradient}
@@ -214,12 +157,17 @@ function App() {
           onSelect={handleSongSelect}
         />
 
+        {/* Progress Bar */}
         <ProgressBar
           currentTime={currentTime}
           duration={duration}
           onSeek={handleSeek}
+          onSeekStart={handleSeekStart}
+          onSeekChange={handleSeekChange}
+          onSeekEnd={handleSeekEnd}
         />
-        {/* Song Info */}
+
+        {/* Song Info (no download here anymore) */}
         <SongInfo song={songs[currentIndex]} />
 
         {/* Audio Player */}
@@ -228,7 +176,9 @@ function App() {
           autoPlay
           src={
             songs[currentIndex]
-              ? `https://asrith-music-player.onrender.com/stream/${songs[currentIndex]?.id}`
+              ? mode === "online"
+                ? `https://asrith-music-player.onrender.com/stream/${songs[currentIndex]?.id}`
+                : songs[currentIndex]?.blobUrl
               : undefined
           }
           onEnded={playNext}
@@ -251,5 +201,3 @@ function App() {
     </>
   );
 }
-
-export default App;
