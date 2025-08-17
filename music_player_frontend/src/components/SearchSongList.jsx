@@ -1,295 +1,197 @@
-import { useState, useEffect, useRef } from "react";
-import { FaSearch } from "react-icons/fa";
+// src/components/SearchSongList.jsx
+import React, { useState } from "react";
+import { FaDownload } from "react-icons/fa";
 
-function useDebounce(value, delay) {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-  useEffect(() => {
-    const handler = setTimeout(() => setDebouncedValue(value), delay);
-    return () => clearTimeout(handler);
-  }, [value, delay]);
-  return debouncedValue;
-}
+function SearchSongList({ songs, currentIndex, onSelect }) {
+  const [query, setQuery] = useState("");
+  const [searchOpen, setSearchOpen] = useState(false);
 
-export default function SearchSongList({ songs, onSelect }) {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [highlightedIndex, setHighlightedIndex] = useState(-1);
-  const inputRef = useRef(null);
-  const modalRef = useRef(null);
+  // Filter songs
+  const filtered = songs.filter((s) =>
+    s.name.toLowerCase().includes(query.toLowerCase())
+  );
 
-  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+  // Download helper
+  async function downloadSong(song) {
+    try {
+      const response = await fetch(
+        `https://asrith-music-player.onrender.com/stream/${song.id}`
+      );
+      if (!response.ok) throw new Error(`HTTP error ${response.status}`);
 
-  const filteredSongs = songs
-    .filter((song) =>
-      song.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
-    )
-    /*.slice(0, 10); /*limit results to 10 for performance*/
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
 
-  const cleanName = (name) => {
-    let displayName = name;
-    displayName = displayName.replace(/^\s*([\[\(]?\d+[\]\)]?\s*[-.]?\s*)+/, "");
-    displayName = displayName.replace(/\s*-\s*SenSongsM?p?3\.[^.]+\.mp3$/i, "");
-    displayName = displayName.replace(/\s*\[.*?SenSongsM?p?3\.[^\]]*\]\.mp3$/i, "");
-    displayName = displayName.replace(/\.mp3$/i, "");
-    return displayName.trim();
-  };
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${song.name}.mp3`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
 
-  const highlightMatch = (name, term) => {
-    if (!term) return name;
-    const regex = new RegExp(`(${term})`, "gi");
-    const parts = name.split(regex);
-    return parts.map((part, i) =>
-      regex.test(part) ? (
-        <mark
-          key={i}
-          style={{
-            backgroundColor: "#666", // dark grey highlight
-            color: "white",
-            padding: "0 3px",
-            borderRadius: "3px",
-          }}
-        >
-          {part}
-        </mark>
-      ) : (
-        part
-      )
-    );
-  };
-
-  // Close modal on click outside or Escape key
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (modalRef.current && !modalRef.current.contains(e.target)) {
-        setIsModalOpen(false);
-        setSearchTerm("");
-        setHighlightedIndex(-1);
-      }
-    };
-    const handleEsc = (e) => {
-      if (e.key === "Escape") {
-        setIsModalOpen(false);
-        setSearchTerm("");
-        setHighlightedIndex(-1);
-      }
-    };
-
-    if (isModalOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-      document.addEventListener("keydown", handleEsc);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEsc);
+      alert(`✅ ${song.name}.mp3 downloaded to Downloads folder`);
+    } catch (err) {
+      console.error("❌ Download failed:", err);
+      alert("❌ Could not download song. Check console.");
     }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEsc);
-    };
-  }, [isModalOpen]);
-
-  const handleKeyDown = (e) => {
-    if (!isModalOpen) return;
-
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setHighlightedIndex((i) => (i + 1) % filteredSongs.length);
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setHighlightedIndex((i) => (i - 1 + filteredSongs.length) % filteredSongs.length);
-    } else if (e.key === "Enter") {
-      e.preventDefault();
-      if (highlightedIndex >= 0 && highlightedIndex < filteredSongs.length) {
-        onSelect(highlightedIndex);
-        setIsModalOpen(false);
-        setSearchTerm("");
-        setHighlightedIndex(-1);
-      }
-    }
-  };
+  }
 
   return (
-    <>
-      {/* Small search bar fixed top center */}
-      <div
-        onClick={() => setIsModalOpen(true)}
-        style={{
-          position: "fixed",
-          top: "13%",
-          left: "50%",
-          width: "250px",
-          maxWidth: "90vw",
-          transform: "translateX(-140px)",
-          zIndex: 1000,
-          backgroundColor: "white",
-          borderRadius: "30px",
-          padding: "10px 16px",
-          display: "flex",
-          alignItems: "center",
-          cursor: "text",
-          boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
-          userSelect: "none",
-        }}
-        aria-label="Open search modal"
-      >
-        <FaSearch style={{ color: "#555", marginRight: "12px" }} size={18} />
-        <span style={{ color: "#000", flexGrow: 1, textAlign: "center", userSelect: "none" }}>
-          Search songs...
-        </span>
-      </div>
+    <div style={{ width: "100%", maxWidth: "600px", marginBottom: "20px" }}>
+      {/* Main Search Box - hides once overlay is open */}
+      {!searchOpen && (
+        <input
+          type="text"
+          placeholder="Search songs..."
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setSearchOpen(true);
+          }}
+          style={{
+            width: "100%",
+            padding: "6px 10px",
+            borderRadius: "12px",
+            border: "1px solid #ccc",
+            outline: "none",
+            color: "#22c55e",
+          }}
+        />
+      )}
 
-      {/* Modal overlay */}
-      {isModalOpen && (
+      {/* Search overlay */}
+      {searchOpen && (
         <div
           style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            height: "100vh",
-            width: "100vw",
-            backgroundColor: "rgba(0,0,0,0.6)",
-            zIndex: 1500,
-            display: "flex",
-            justifyContent: "center",
-            paddingTop: "0px",
-            boxSizing: "border-box",
+            position: "absolute",
+            top: "10px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "90%",
+            maxWidth: "600px",
+            maxHeight: "300px",
+            overflowY: "auto",
+            background: "#fff",
+            border: "1px solid #ccc",
+            borderRadius: "24px",
+            padding: "15px",
+            zIndex: 999,
+            boxShadow: "4px 4px 8px rgba(0,0,0,0.1)",
           }}
         >
+          {/* Overlay Header */}
           <div
-            ref={modalRef}
             style={{
-              width: "320px",
-              maxWidth: "90vw",
-              backgroundColor: "black",
-              borderRadius: "24px",
-              boxShadow: "0 6px 18px rgba(0,0,0,0.7)",
-              padding: "20px",
-              color: "white",
-              fontFamily: "Arial, sans-serif",
-              outline: "none",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "2px",
             }}
-            tabIndex={-1}
-            onKeyDown={handleKeyDown}
           >
-            {/* Search input */}
-            <div
+            {/* Search input inside overlay */}
+            <input
+              type="text"
+              placeholder="Search songs..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
               style={{
-                display: "flex",
-                alignItems: "center",
-                padding: "12px 16px",
-                borderRadius: "30px",
-                border: "2px solid #22c55e",
-                backgroundColor: "white",
-                marginBottom: "12px",
+                flex: 1,
+                padding: "8px 10px",
+                borderRadius: "8px",
+                border: "1px solid #ccc",
+                outline: "none",
+                color: "#22c55e",
+                marginRight: "10px",
+              }}
+              autoFocus
+            />
+            {/* Close button */}
+            <button
+              onClick={() => {
+                setSearchOpen(false);
+                setQuery("");
+              }}
+              style={{
+                border: "none",
+                background: "transparent",
+                fontSize: "14px",
+                cursor: "pointer",
+                color: "#888",
               }}
             >
-              <FaSearch style={{ color: "#555", marginRight: "1px" }} size={18} />
-              <input
-                ref={inputRef}
-                type="text"
-                placeholder="Search songs..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                autoFocus
-                aria-label="Search songs"
-                autoComplete="off"
-                style={{
-                  flexGrow: 1,
-                  border: "none",
-                  outline: "none",
-                  backgroundColor: "transparent",
-                  color: "black",
-                  fontSize: "16px",
-                  textAlign: "center",
-                }}
-              />
-              {searchTerm && (
-                <button
-                onClick={() => setSearchTerm("")}
-                aria-label="Clear search"
-                type="button"
-                style={{
-                    marginLeft: "20px",
-                    border: "none",
-                    background: "none",
-                    color: "black",  // darker gray, more visible on light bg
-                    fontWeight: "bold",
-                    cursor: "pointer",
-                    fontSize: "18px",
-                    lineHeight: 1,
-                    padding: "0 6px",  // add some clickable area
-                }}
-                >
-                ✕
-                </button>
-              )}
-            </div>
+              ✖
+            </button>
+          </div>
 
-            {/* Results */}
-            <ul
-              style={{
-                maxHeight: "500px",
-                overflowY: "auto",
-                borderRadius: "24px 24px 24px 24px",
-                borderTop: "none",
-                border: "2px solid white",
-                backgroundColor: "black",
-                color: "white",
-                listStyle: "none",
-                padding: 0,
-                boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
-                margin: 0,
-              }}
-              role="listbox"
-            >
-              {filteredSongs.length === 0 ? (
-                <li
+          {/* Song list */}
+          <div
+            style={{
+              maxHeight: "280px",
+              overflowY: "auto",
+              scrollbarWidth: "thin",
+              scrollbarColor: "#ccc transparent",
+            }}
+          >
+            {filtered.length === 0 ? (
+              <p style={{ textAlign: "center", color: "#666" }}>No songs found</p>
+            ) : (
+              filtered.map((song) => (
+                <div
+                  key={song.id}
                   style={{
-                    padding: "12px",
-                    textAlign: "center",
-                    borderBottom: "1px solid white",
-                    userSelect: "none",
-                    fontSize: "14px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    padding: "6px 0",
+                    cursor: "pointer",
+                    borderBottom: "1px solid #eee",
                   }}
                 >
-                  No songs found.
-                </li>
-              ) : (
-                filteredSongs.map((song, idx) => {
-                  const displayName = cleanName(song.name);
-                  const isHighlighted = idx === highlightedIndex;
-                  return (
-                    <li
-                      key={song.id}
-                      onMouseDown={() => {
-                        onSelect(idx);
-                        setIsModalOpen(false);
-                        setSearchTerm("");
-                        setHighlightedIndex(-1);
-                      }}
-                      onMouseEnter={() => setHighlightedIndex(idx)}
-                      role="option"
-                      aria-selected={isHighlighted}
-                      style={{
-                        padding: "12px",
-                        cursor: "pointer",
-                        textAlign: "center",
-                        borderBottom: idx !== filteredSongs.length - 1 ? "1px solid white" : "none",
-                        backgroundColor: isHighlighted ? "#444" : "transparent",
-                        fontWeight: isHighlighted ? "600" : "normal",
-                        transition: "background-color 0.2s ease",
-                        userSelect: "none",
-                      }}
-                    >
-                      {highlightMatch(displayName, debouncedSearchTerm)}
-                    </li>
-                  );
-                })
-              )}
-            </ul>
+                  {/* Song Name */}
+                  <span
+                    onClick={() => {
+                      onSelect(songs.indexOf(song));
+                      setSearchOpen(false);
+                      setQuery("");
+                    }}
+                    style={{
+                      flex: 1,
+                      marginRight: "10px",
+                      color:
+                        songs.indexOf(song) === currentIndex
+                          ? "#22c55e"
+                          : "#000",
+                      fontWeight:
+                        songs.indexOf(song) === currentIndex ? "bold" : "normal",
+                    }}
+                  >
+                    {song.name}
+                  </span>
+
+                  {/* Download Button */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      downloadSong(song);
+                    }}
+                    style={{
+                      border: "none",
+                      background: "transparent",
+                      cursor: "pointer",
+                      color: "#22c55e",
+                    }}
+                  >
+                    <FaDownload size={14} />
+                  </button>
+                </div>
+              ))
+            )}
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
+
+export default SearchSongList;

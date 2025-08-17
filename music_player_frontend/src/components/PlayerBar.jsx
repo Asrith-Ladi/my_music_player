@@ -88,7 +88,7 @@ export default function PlayerBar({
           title={isPlaying ? "Pause" : "Play"}
           style={{ marginRight: '8px' }}
         >
-          {isPlaying ? <Pause size={22} /> : <Play size={22} />}
+          {isPlaying ? <Pause size={18} /> : <Play size={18} />}
         </button>
         <button
           onClick={onNext}
