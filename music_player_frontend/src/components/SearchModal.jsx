@@ -1,4 +1,5 @@
-import { Search, X } from "lucide-react";
+import React from "react";
+import { Search, X, Mic } from "lucide-react";
 
 export default function SearchModal({
   searchTerm,
@@ -7,18 +8,20 @@ export default function SearchModal({
   handleSongSelect,
   closeModal,
   songs,
+  startVoiceSearch,
+  listening,
 }) {
   return (
     <div
       style={{
         position: "fixed",
         inset: 0,
-        backgroundColor: "rgba(0, 0, 0, 0.8)",
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
         display: "flex",
         justifyContent: "center",
         alignItems: "start",
-        paddingTop: "20px",
-        zIndex: 1000,
+        paddingTop: "40px",
+        zIndex: 100,
       }}
       onClick={closeModal}
     >
@@ -27,14 +30,13 @@ export default function SearchModal({
           backgroundColor: "white",
           color: "black",
           borderRadius: "12px",
-          padding: "20px",
+          padding: "16px",
           width: "90%",
           maxWidth: "600px",
-          maxHeight: "90vh",
+          maxHeight: "calc(100vh - 80px)",
           boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
           position: "relative",
-          display: "flex",
-          flexDirection: "column",
+          overflow: "hidden",
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -53,18 +55,34 @@ export default function SearchModal({
           </button>
         </div>
 
-        {/* Search Box */}
+        {/* Search Box with Voice Search */}
         <div style={{ position: "relative", marginBottom: "16px" }}>
-          <Search
-            size={18}
-            style={{
-              position: "absolute",
-              left: "12px",
-              top: "30%",
-              transform: "translateY(-50%)",
-              color: "#999",
-            }}
-          />
+          {Search ? (
+            <Search
+              size={18}
+              style={{
+                position: "absolute",
+                left: "12px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                color: "#999",
+              }}
+            />
+          ) : (
+            <span
+              style={{
+                position: "absolute",
+                left: "12px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                color: "#999",
+                fontSize: "16px",
+              }}
+            >
+              🔍
+            </span>
+          )}
+
           <input
             type="text"
             placeholder="Search songs..."
@@ -80,12 +98,28 @@ export default function SearchModal({
             }}
             autoFocus
           />
+
+          <button
+            onClick={startVoiceSearch}
+            style={{
+              position: "absolute",
+              right: "12px",
+              top: "50%",
+              transform: "translateY(-50%)",
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+            }}
+            title="Voice Search"
+          >
+            <Mic size={20} color={listening ? "red" : "gray"} />
+          </button>
         </div>
 
         {/* Scrollable Song List */}
         <ul
           style={{
-            flex: 1,
+            maxHeight: "calc(100vh - 200px)", // Fill rest of screen
             overflowY: "auto",
             margin: "0",
             padding: "0",
@@ -93,13 +127,7 @@ export default function SearchModal({
           }}
         >
           {filteredSongs.length === 0 ? (
-            <li
-              style={{
-                padding: "12px",
-                textAlign: "center",
-                color: "#666",
-              }}
-            >
+            <li style={{ padding: "12px", textAlign: "center", color: "#666" }}>
               No songs found
             </li>
           ) : (
@@ -114,10 +142,9 @@ export default function SearchModal({
                   borderRadius: "8px",
                   marginBottom: "4px",
                   backgroundColor: "#f9f9f9",
-                  transition: "background 0.2s",
                 }}
                 onMouseOver={(e) =>
-                  (e.currentTarget.style.backgroundColor = "#22c55e22")
+                  (e.currentTarget.style.backgroundColor = "#e5f3ff")
                 }
                 onMouseOut={(e) =>
                   (e.currentTarget.style.backgroundColor = "#f9f9f9")

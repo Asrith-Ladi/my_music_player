@@ -195,7 +195,7 @@ export default function App() {
         autoPlay
         src={
           songs.length > 0 && songs[currentIndex]
-            ? `https://asrith-music-player.onrender.com/stream/${songs[currentIndex]?.id}`
+            ? `http://localhost:8000/stream/${songs[currentIndex]?.id}`
             : undefined
         }
         onEnded={playNext}
