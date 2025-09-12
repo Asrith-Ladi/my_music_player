@@ -1,0 +1,184 @@
+2025-09-13 00:05:16,966 [INFO]: Initializing Google Drive service
+2025-09-13 00:05:16,971 [INFO]: file_cache is only supported with oauth2client<4.0.0
+2025-09-13 00:05:16,973 [INFO]: Listing folder id: 1W-195_2RqErcF_7XS0dFKC-BFl5oJ1K2
+2025-09-13 00:05:19,037 [INFO]: Found: Yeto Vellipoyindi (MIME: audio/mpeg)
+2025-09-13 00:05:19,037 [INFO]: Adding song: Yeto Vellipoyindi
+2025-09-13 00:05:19,037 [INFO]: Found: Saranga Dariya (MIME: audio/mpeg)
+2025-09-13 00:05:19,037 [INFO]: Adding song: Saranga Dariya
+2025-09-13 00:05:19,037 [INFO]: Found: Oh Prema (MIME: audio/mpeg)
+2025-09-13 00:05:19,037 [INFO]: Adding song: Oh Prema
+2025-09-13 00:05:19,037 [INFO]: Found: Nuvvunte Chaley (MIME: audio/mpeg)
+2025-09-13 00:05:19,037 [INFO]: Adding song: Nuvvunte Chaley
+2025-09-13 00:05:19,037 [INFO]: Found: Needhe Needhe (MIME: audio/mpeg)
+2025-09-13 00:05:19,037 [INFO]: Adding song: Needhe Needhe
+2025-09-13 00:05:19,037 [INFO]: Found: Nee Chitram Choosi (MIME: audio/mpeg)
+2025-09-13 00:05:19,037 [INFO]: Adding song: Nee Chitram Choosi
+2025-09-13 00:05:19,037 [INFO]: Found: Nagumomu Thaarale (MIME: audio/mpeg)
+2025-09-13 00:05:19,037 [INFO]: Adding song: Nagumomu Thaarale
+2025-09-13 00:05:19,037 [INFO]: Found: Kannullo Ne Roopame (MIME: audio/mpeg)
+2025-09-13 00:05:19,043 [INFO]: Adding song: Kannullo Ne Roopame
+2025-09-13 00:05:19,043 [INFO]: Found: Enno Enno (MIME: audio/mpeg)
+2025-09-13 00:05:19,043 [INFO]: Adding song: Enno Enno
+2025-09-13 00:05:19,043 [INFO]: Found: Ee Raathale (MIME: audio/mpeg)
+2025-09-13 00:05:19,043 [INFO]: Adding song: Ee Raathale
+2025-09-13 00:05:19,043 [INFO]: Found: Asalelaa (MIME: audio/mpeg)
+2025-09-13 00:05:19,043 [INFO]: Adding song: Asalelaa
+2025-09-13 00:05:19,043 [INFO]: Found: Ay Pilla (MIME: audio/mpeg)
+2025-09-13 00:05:19,043 [INFO]: Adding song: Ay Pilla
+2025-09-13 00:05:19,043 [INFO]: Found: O Cheliya (MIME: audio/mpeg)
+2025-09-13 00:05:19,043 [INFO]: Adding song: O Cheliya
+2025-09-13 00:05:19,043 [INFO]: Found: Paruvam Vanaga (MIME: audio/mpeg)
+2025-09-13 00:05:19,043 [INFO]: Adding song: Paruvam Vanaga
+2025-09-13 00:05:19,043 [INFO]: Found: Andhamaina Premarani (MIME: audio/mpeg)
+2025-09-13 00:05:19,043 [INFO]: Adding song: Andhamaina Premarani
+2025-09-13 00:05:19,043 [INFO]: Found: Chali Champutunna Chamakkulo (MIME: audio/mpeg)
+2025-09-13 00:05:19,043 [INFO]: Adding song: Chali Champutunna Chamakkulo
+2025-09-13 00:05:19,045 [INFO]: Found: Kannulatho (MIME: audio/mpeg)
+2025-09-13 00:05:19,045 [INFO]: Adding song: Kannulatho
+2025-09-13 00:05:19,045 [INFO]: Found: Jaamu Rathiri (MIME: audio/mpeg)
+2025-09-13 00:05:19,045 [INFO]: Adding song: Jaamu Rathiri
+2025-09-13 00:05:19,045 [INFO]: Found: Poovullo Daagunna (MIME: audio/mpeg)
+2025-09-13 00:05:19,045 [INFO]: Adding song: Poovullo Daagunna
+2025-09-13 00:05:19,046 [INFO]: Found: Balapam Patti (MIME: audio/mpeg)
+2025-09-13 00:05:19,046 [INFO]: Adding song: Balapam Patti
+2025-09-13 00:05:19,046 [INFO]: Found: Urvasi Urvasi (MIME: audio/mpeg)
+2025-09-13 00:05:19,046 [INFO]: Adding song: Urvasi Urvasi
+2025-09-13 00:05:19,046 [INFO]: Found: Chinni Chinni Aasa (MIME: audio/mpeg)
+2025-09-13 00:05:19,046 [INFO]: Adding song: Chinni Chinni Aasa
+2025-09-13 00:05:19,046 [INFO]: Found: Little hearts (MIME: application/vnd.google-apps.folder)
+2025-09-13 00:05:19,046 [INFO]: Found subfolder: Little hearts - Recursing...
+2025-09-13 00:05:19,047 [INFO]:   Listing folder id: 1ZJEL-y2yJfg1KK_EXWiJLCAYo8O6eATB
+2025-09-13 00:05:19,653 [INFO]:   Found: Rajagadiki.mp3 (MIME: audio/mpeg)
+2025-09-13 00:05:19,653 [INFO]:   Adding song: Rajagadiki.mp3
+2025-09-13 00:05:19,653 [INFO]:   Found: Khathyayani.mp3 (MIME: audio/mpeg)
+2025-09-13 00:05:19,653 [INFO]:   Adding song: Khathyayani.mp3
+2025-09-13 00:05:19,653 [INFO]:   Found: Hello Ani.mp3 (MIME: audio/mpeg)
+2025-09-13 00:05:19,653 [INFO]:   Adding song: Hello Ani.mp3
+2025-09-13 00:05:19,653 [INFO]:   Found: Ee Dhooramey.mp3 (MIME: audio/mpeg)
+2025-09-13 00:05:19,653 [INFO]:   Adding song: Ee Dhooramey.mp3
+2025-09-13 00:05:19,653 [INFO]:   Found: Chaduvu Ledu.mp3 (MIME: audio/mpeg)
+2025-09-13 00:05:19,653 [INFO]:   Adding song: Chaduvu Ledu.mp3
+2025-09-13 00:05:19,653 [INFO]: Found: Oohalu gusa gusalade (MIME: application/vnd.google-apps.folder)
+2025-09-13 00:05:19,653 [INFO]: Found subfolder: Oohalu gusa gusalade - Recursing...
+2025-09-13 00:05:19,653 [INFO]:   Listing folder id: 1WyRdaoSW5qVuK7uoxP9qh278xvFD2L6Q
+2025-09-13 00:05:20,156 [INFO]:   Found: Em Sandheham Ledhu (MIME: audio/mpeg)
+2025-09-13 00:05:20,157 [INFO]:   Adding song: Em Sandheham Ledhu
+2025-09-13 00:05:20,157 [INFO]: Found: Rangam (MIME: application/vnd.google-apps.folder)
+2025-09-13 00:05:20,157 [INFO]: Found subfolder: Rangam - Recursing...
+2025-09-13 00:05:20,157 [INFO]:   Listing folder id: 1W4L6nzefC_TFIMFO9-W-Gvxq43BelGUV
+2025-09-13 00:05:20,647 [INFO]:   Found: Enduko Emo (MIME: audio/mpeg)
+2025-09-13 00:05:20,653 [INFO]:   Adding song: Enduko Emo
+2025-09-13 00:05:20,653 [INFO]: Found: Krishnagadi veera prema kada (MIME: application/vnd.google-apps.folder)
+2025-09-13 00:05:20,653 [INFO]: Found subfolder: Krishnagadi veera prema kada - Recursing...
+2025-09-13 00:05:20,653 [INFO]:   Listing folder id: 1WriIBh6O7uGoFumtCnYQnqUiKsVE8axT
+2025-09-13 00:05:21,133 [INFO]:   Found: Nuvvante Na Navvu (MIME: audio/mpeg)
+2025-09-13 00:05:21,133 [INFO]:   Adding song: Nuvvante Na Navvu
+2025-09-13 00:05:21,133 [INFO]: Found: Gangs of godavari (MIME: application/vnd.google-apps.folder)
+2025-09-13 00:05:21,133 [INFO]: Found subfolder: Gangs of godavari - Recursing...
+2025-09-13 00:05:21,135 [INFO]:   Listing folder id: 1WhvrcDRYACgd2HHM3GgS9rD-XXxQtXH4
+2025-09-13 00:05:21,731 [INFO]:   Found: Suttamla Soosi.mp3 (MIME: audio/mpeg)
+2025-09-13 00:05:21,731 [INFO]:   Adding song: Suttamla Soosi.mp3
+2025-09-13 00:05:21,731 [INFO]: Found: Ooru peru bhairava kona (MIME: application/vnd.google-apps.folder)
+2025-09-13 00:05:21,731 [INFO]: Found subfolder: Ooru peru bhairava kona - Recursing...
+2025-09-13 00:05:21,731 [INFO]:   Listing folder id: 1WUqVlGTcnBgbvYweORU2HYAp0OwbDfss
+2025-09-13 00:05:22,232 [INFO]:   Found: Nijame Ne Chebuthunna (MIME: audio/mpeg)
+2025-09-13 00:05:22,232 [INFO]:   Adding song: Nijame Ne Chebuthunna
+2025-09-13 00:05:22,232 [INFO]: Found: Ananthapuram 1980 (MIME: application/vnd.google-apps.folder)
+2025-09-13 00:05:22,233 [INFO]: Found subfolder: Ananthapuram 1980 - Recursing...
+2025-09-13 00:05:22,233 [INFO]:   Listing folder id: 1WQ5DT7e-Yl9ie6CF72tgDyhkTnNkOpxm
+2025-09-13 00:05:22,723 [INFO]:   Found: Konte Chooputho (MIME: audio/mpeg)
+2025-09-13 00:05:22,723 [INFO]:   Adding song: Konte Chooputho
+2025-09-13 00:05:22,723 [INFO]: Found: 8 Vasanthalu (MIME: application/vnd.google-apps.folder)
+2025-09-13 00:05:22,723 [INFO]: Found subfolder: 8 Vasanthalu - Recursing...
+2025-09-13 00:05:22,723 [INFO]:   Listing folder id: 1WA8KXaz8Xb5jwxlTstyV2sGOUNDIN8Nf
+2025-09-13 00:05:23,184 [INFO]:   Found: Andhamaa Andhamaa (MIME: audio/mpeg)
+2025-09-13 00:05:23,184 [INFO]:   Adding song: Andhamaa Andhamaa
+2025-09-13 00:05:23,184 [INFO]:   Found: Parichayamila (MIME: audio/mpeg)
+2025-09-13 00:05:23,184 [INFO]:   Adding song: Parichayamila
+2025-09-13 00:05:23,184 [INFO]: Found: Gulabi (MIME: application/vnd.google-apps.folder)
+2025-09-13 00:05:23,184 [INFO]: Found subfolder: Gulabi - Recursing...
+2025-09-13 00:05:23,184 [INFO]:   Listing folder id: 1W5jBbFuEATlRU8FaJi9hVLrpDAGBRmMF
+2025-09-13 00:05:23,676 [INFO]:   Found: 02 - Ee Velalo [www.SenSongsMp3.co].mp3 (MIME: audio/mpeg)
+2025-09-13 00:05:23,676 [INFO]:   Adding song: 02 - Ee Velalo [www.SenSongsMp3.co].mp3
+2025-09-13 00:05:23,676 [INFO]: Found: Dear Comrade (MIME: application/vnd.google-apps.folder)
+2025-09-13 00:05:23,676 [INFO]: Found subfolder: Dear Comrade - Recursing...
+2025-09-13 00:05:23,676 [INFO]:   Listing folder id: 1Vuot-UnAQi8EhgyxSDP_9YYm5uOHgFV4
+2025-09-13 00:05:24,293 [INFO]:   Found: Yetu Pone (MIME: audio/mpeg)
+2025-09-13 00:05:24,293 [INFO]:   Adding song: Yetu Pone
+2025-09-13 00:05:24,294 [INFO]:   Found: Nee Neeli Kannullona (MIME: audio/mpeg)
+2025-09-13 00:05:24,294 [INFO]:   Adding song: Nee Neeli Kannullona
+2025-09-13 00:05:24,294 [INFO]:   Found: Kadalalle (MIME: audio/mpeg)
+2025-09-13 00:05:24,296 [INFO]:   Adding song: Kadalalle
+2025-09-13 00:05:24,296 [INFO]:   Found: Gira Gira Gira (MIME: audio/mpeg)
+2025-09-13 00:05:24,296 [INFO]:   Adding song: Gira Gira Gira
+2025-09-13 00:05:24,296 [INFO]: Found: Seetharamam (MIME: application/vnd.google-apps.folder)
+2025-09-13 00:05:24,296 [INFO]: Found subfolder: Seetharamam - Recursing...
+2025-09-13 00:05:24,296 [INFO]:   Listing folder id: 1VgEi1AmW7zqOEOI2gxm7Ccx5zC9p-heD
+2025-09-13 00:05:24,929 [INFO]:   Found: Oh Sita Hey Rama (MIME: audio/mpeg)
+2025-09-13 00:05:24,931 [INFO]:   Adding song: Oh Sita Hey Rama
+2025-09-13 00:05:24,931 [INFO]:   Found: Kaanunna Kalyanam (MIME: audio/mpeg)
+2025-09-13 00:05:24,931 [INFO]:   Adding song: Kaanunna Kalyanam
+2025-09-13 00:05:24,931 [INFO]:   Found: Inthandham (MIME: audio/mpeg)
+2025-09-13 00:05:24,931 [INFO]:   Adding song: Inthandham
+2025-09-13 00:05:24,931 [INFO]:   Found: Chedhu Nijam (MIME: audio/mpeg)
+2025-09-13 00:05:24,931 [INFO]:   Adding song: Chedhu Nijam
+2025-09-13 00:05:24,931 [INFO]: Found: Hit3 (MIME: application/vnd.google-apps.folder)
+2025-09-13 00:05:24,931 [INFO]: Found subfolder: Hit3 - Recursing...
+2025-09-13 00:05:24,931 [INFO]:   Listing folder id: 1VdO2wSP0p5XJEX4F3X-wKIyIH_sc-Jkq
+2025-09-13 00:05:25,409 [INFO]:   Found: Prema Velluva (MIME: audio/mpeg)
+2025-09-13 00:05:25,410 [INFO]:   Adding song: Prema Velluva
+2025-09-13 00:05:25,410 [INFO]: Found: Colour photo (MIME: application/vnd.google-apps.folder)
+2025-09-13 00:05:25,411 [INFO]: Found subfolder: Colour photo - Recursing...
+2025-09-13 00:05:25,411 [INFO]:   Listing folder id: 1VDPNMGwpgvjH-JwxaxE9DZzFDwbxNMbr
+2025-09-13 00:05:25,897 [INFO]:   Found: Tharagathi Gadhi (MIME: audio/mpeg)
+2025-09-13 00:05:25,897 [INFO]:   Adding song: Tharagathi Gadhi
+2025-09-13 00:05:25,897 [INFO]:   Found: Arere Aakasham (MIME: audio/mpeg)
+2025-09-13 00:05:25,898 [INFO]:   Adding song: Arere Aakasham
+2025-09-13 00:05:25,898 [INFO]: Found: Orange (MIME: application/vnd.google-apps.folder)
+2025-09-13 00:05:25,898 [INFO]: Found subfolder: Orange - Recursing...
+2025-09-13 00:05:25,898 [INFO]:   Listing folder id: 1Uygni14PO6_TcU8P1xGdlgQDVPG-JUOE
+2025-09-13 00:05:26,383 [INFO]:   Found: Hello Rammante (MIME: audio/mpeg)
+2025-09-13 00:05:26,383 [INFO]:   Adding song: Hello Rammante
+2025-09-13 00:05:26,383 [INFO]:   Found: Rooba Rooba (MIME: audio/mpeg)
+2025-09-13 00:05:26,383 [INFO]:   Adding song: Rooba Rooba
+2025-09-13 00:05:26,383 [INFO]:   Found: O Range (MIME: audio/mpeg)
+2025-09-13 00:05:26,383 [INFO]:   Adding song: O Range
+2025-09-13 00:05:26,383 [INFO]:   Found: Nenu Nuvvantu (MIME: audio/mpeg)
+2025-09-13 00:05:26,383 [INFO]:   Adding song: Nenu Nuvvantu
+2025-09-13 00:05:26,383 [INFO]:   Found: Chilipiga (MIME: audio/mpeg)
+2025-09-13 00:05:26,383 [INFO]:   Adding song: Chilipiga
+2025-09-13 00:05:26,383 [INFO]:   Found: Ola Olaala Ala (MIME: audio/mpeg)
+2025-09-13 00:05:26,383 [INFO]:   Adding song: Ola Olaala Ala
+2025-09-13 00:05:26,383 [INFO]: Found: Godavari (MIME: application/vnd.google-apps.folder)
+2025-09-13 00:05:26,383 [INFO]: Found subfolder: Godavari - Recursing...
+2025-09-13 00:05:26,383 [INFO]:   Listing folder id: 1Us2Jf2NUt6URkvJvzNPNhH_6Cgqd0H_t
+2025-09-13 00:05:26,880 [INFO]:   Found: 01 - Uppongele Godavari - SenSongsMp3.co.mp3 (MIME: audio/mpeg)
+2025-09-13 00:05:26,880 [INFO]:   Adding song: 01 - Uppongele Godavari - SenSongsMp3.co.mp3
+2025-09-13 00:05:26,880 [INFO]:   Found: 02 - Manasavacha  - SenSongsMp3.co.mp3 (MIME: audio/mpeg)
+2025-09-13 00:05:26,880 [INFO]:   Adding song: 02 - Manasavacha  - SenSongsMp3.co.mp3
+2025-09-13 00:05:26,881 [INFO]:   Found: 06 - Ramachakani Sita  - SenSongsMp3.co.mp3 (MIME: audio/mpeg)
+2025-09-13 00:05:26,881 [INFO]:   Adding song: 06 - Ramachakani Sita  - SenSongsMp3.co.mp3
+2025-09-13 00:05:26,881 [INFO]: Found: Oy (MIME: application/vnd.google-apps.folder)
+2025-09-13 00:05:26,881 [INFO]: Found subfolder: Oy - Recursing...
+2025-09-13 00:05:26,881 [INFO]:   Listing folder id: 1UpQur5_MDKnHRYRzqunz8FPI3l1fwIJN
+2025-09-13 00:05:27,375 [INFO]:   Found: Waiting For You (MIME: audio/mpeg)
+2025-09-13 00:05:27,376 [INFO]:   Adding song: Waiting For You
+2025-09-13 00:05:27,377 [INFO]:   Found: Povodhe Prema (MIME: audio/mpeg)
+2025-09-13 00:05:27,377 [INFO]:   Adding song: Povodhe Prema
+2025-09-13 00:05:27,377 [INFO]:   Found: Seheri (MIME: audio/mpeg)
+2025-09-13 00:05:27,378 [INFO]:   Adding song: Seheri
+2025-09-13 00:05:27,378 [INFO]:   Found: Saradaga (MIME: audio/mpeg)
+2025-09-13 00:05:27,378 [INFO]:   Adding song: Saradaga
+2025-09-13 00:05:27,378 [INFO]:   Found: Oy! Oy! (MIME: audio/mpeg)
+2025-09-13 00:05:27,378 [INFO]:   Adding song: Oy! Oy!
+2025-09-13 00:05:27,378 [INFO]: Found: Aakasame ni haddura (MIME: application/vnd.google-apps.folder)
+2025-09-13 00:05:27,378 [INFO]: Found subfolder: Aakasame ni haddura - Recursing...
+2025-09-13 00:05:27,378 [INFO]:   Listing folder id: 1UlrHp68DjvYdxzGiKSLdnaiH75N-mOIQ
+2025-09-13 00:05:27,846 [INFO]:   Found: Pilla Puli (MIME: audio/mpeg)
+2025-09-13 00:05:27,846 [INFO]:   Adding song: Pilla Puli
+2025-09-13 00:05:27,846 [INFO]:   Found: Kaatuka Kanule (MIME: audio/mpeg)
+2025-09-13 00:05:27,847 [INFO]:   Adding song: Kaatuka Kanule
+2025-09-13 00:05:27,847 [INFO]: Total songs found: 63
+2025-09-13 00:06:17,113 [INFO]: Streaming file 1U-FmbTqO82N3O6TDCHQ8IJkKxcCNYJ8k
+2025-09-13 00:06:17,113 [INFO]: Initializing Google Drive service
+2025-09-13 00:06:17,115 [INFO]: file_cache is only supported with oauth2client<4.0.0
