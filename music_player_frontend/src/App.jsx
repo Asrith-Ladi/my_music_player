@@ -7,7 +7,8 @@ import SearchSongList from "./components/SearchSongList";
 import ThemeSwitcher from "./components/ThemeSwitcher";
 import ThemeBackground from "./components/ThemeBg";
 import ProgressBar from "./components/ProgressBar";
-import ModeToggle from "./components/ModeToggle";
+import { Settings } from "lucide-react";
+import SettingsMenu from "./components/SettingsMenu";
 
 export default function App() {
   const [songs, setSongs] = useState([]);
@@ -20,27 +21,26 @@ export default function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(1);
   const [liked, setLiked] = useState(false);
-  const [mode, setMode] = useState("online");
   const [isSeeking, setIsSeeking] = useState(false);
   const [seekValue, setSeekValue] = useState(0);
+  const [showTheme, setShowTheme] = useState(false);
   const audioRef = useRef(null);
 
   const darkGradient = "linear-gradient(135deg, #232526, #414345, #181818)";
   const lightGradient = `linear-gradient(135deg, #d1fae5, ${lightColor}, #6ee7b7)`;
+  const [searchModalOpen, setSearchModalOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const filteredSongs = songs.filter((s) =>
+    s.name.toLowerCase().includes(searchTerm.toLowerCase())
+);
 
-  // Fetch songs whenever mode changes
   useEffect(() => {
-    if (mode === "online") {
-      fetch("https://asrith-music-player.onrender.com/songs")
-        .then((res) => res.json())
-        .then((data) => setSongs(data))
-        .catch((err) => console.error("❌ Online fetch failed:", err));
-    } else {
-      setSongs([]); // placeholder until offline is finalized
-    }
-  }, [mode]);
+    fetch("https://asrith-music-player.onrender.com/songs")
+      .then((res) => res.json())
+      .then((data) => setSongs(data))
+      .catch((err) => console.error("❌ Online fetch failed:", err));
+  }, []);
 
-  // Audio element events
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -64,7 +64,6 @@ export default function App() {
     };
   }, [currentIndex]);
 
-  // Controls
   const playNext = () => {
     setCurrentIndex((prev) =>
       shuffle
@@ -127,77 +126,93 @@ export default function App() {
 
   return (
     <>
-      {/* Mode Toggle */}
-      <ModeToggle mode={mode} setMode={setMode} />
-
-      {/* Background */}
       <ThemeBackground
         theme={theme}
         darkGradient={darkGradient}
         lightGradient={lightGradient}
       />
+      <SearchSongList
+        songs={songs}
+        currentIndex={currentIndex}
+        onSelect={handleSongSelect}
+        style={{ marginTop: "20px", width: "100%", maxWidth: "600px" }}
+        inputStyle={{ height: "36px", fontSize: "14px", padding: "0 10px", borderRadius: "8px" }}
+      />
 
-      <div className="flex flex-col items-center justify-center w-full min-h-screen p-4">
-        {/* Theme Switcher */}
-        <ThemeSwitcher
+
+      {/* Fixed SettingsMenu at top-right */}
+      <div style={{ position: "fixed", top: "20px", right: "16px", zIndex: 100 }}>
+        <SettingsMenu
           theme={theme}
           setTheme={setTheme}
           lightColor={lightColor}
           setLightColor={setLightColor}
         />
-
-        <h1 className="text-3xl font-bold mb-4 text-center text-white mt-24">
-          🎧 Asrith's Music Player
-        </h1>
-
-        {/* Search */}
-        <SearchSongList
-          songs={songs}
-          currentIndex={currentIndex}
-          onSelect={handleSongSelect}
-        />
-
-        {/* Progress Bar */}
-        <ProgressBar
-          currentTime={currentTime}
-          duration={duration}
-          onSeek={handleSeek}
-          onSeekStart={handleSeekStart}
-          onSeekChange={handleSeekChange}
-          onSeekEnd={handleSeekEnd}
-        />
-
-        {/* Song Info (no download here anymore) */}
-        <SongInfo song={songs[currentIndex]} />
-
-        {/* Audio Player */}
-        <audio
-          ref={audioRef}
-          autoPlay
-          src={
-            songs[currentIndex]
-              ? mode === "online"
-                ? `https://asrith-music-player.onrender.com/stream/${songs[currentIndex]?.id}`
-                : songs[currentIndex]?.blobUrl
-              : undefined
-          }
-          onEnded={playNext}
-        />
-
-        {/* Player Controls */}
-        <PlayerBar
-          isPlaying={isPlaying}
-          onPlayPause={handlePlayPause}
-          onNext={playNext}
-          onPrev={playPrevious}
-          onShuffle={() => setShuffle((s) => !s)}
-          shuffle={shuffle}
-          volume={volume}
-          onVolumeChange={handleVolumeChange}
-          liked={liked}
-          onLike={handleLike}
-        />
       </div>
+
+
+      {/* Theme options dropdown/modal */}
+      {showTheme && (
+        <div className="absolute top-20 right-8 z-50 bg-gray-900 rounded-lg shadow-lg p-4 flex flex-col items-center">
+          <SettingsMenu
+            theme={theme}
+            setTheme={setTheme}
+            lightColor={lightColor}
+            setLightColor={setLightColor}
+          />
+        </div>
+      )}
+
+      <h1
+        className="text-5xl font-bold mb-8 text-center mt-24"
+        style={{
+          color: "#fff",
+          letterSpacing: "0.02em",
+          textShadow: "0 2px 16px #000, 0 1px 0 #222",
+          fontFamily: "'Montserrat', 'Segoe UI', Arial, sans-serif",
+          background: "linear-gradient(90deg, #232526 0%, #414345 100%)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          fontWeight: 900,
+        }}
+      >
+        Music Box
+      </h1>
+
+      <ProgressBar
+        currentTime={currentTime}
+        duration={duration}
+        onSeek={handleSeek}
+        onSeekStart={handleSeekStart}
+        onSeekChange={handleSeekChange}
+        onSeekEnd={handleSeekEnd}
+      />
+
+      <SongInfo song={songs[currentIndex]} />
+
+      <audio
+        ref={audioRef}
+        autoPlay
+        src={
+          songs.length > 0 && songs[currentIndex]
+            ? `https://asrith-music-player.onrender.com/stream/${songs[currentIndex]?.id}`
+            : undefined
+        }
+        onEnded={playNext}
+      />
+
+      <PlayerBar
+        isPlaying={isPlaying}
+        onPlayPause={handlePlayPause}
+        onNext={playNext}
+        onPrev={playPrevious}
+        onShuffle={() => setShuffle((s) => !s)}
+        shuffle={shuffle}
+        volume={volume}
+        onVolumeChange={handleVolumeChange}
+        liked={liked}
+        onLike={handleLike}
+      />
     </>
   );
 }

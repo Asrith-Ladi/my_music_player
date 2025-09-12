@@ -1,17 +1,14 @@
-// src/components/SearchSongList.jsx
 import React, { useState } from "react";
 import { FaDownload } from "react-icons/fa";
 
-function SearchSongList({ songs, currentIndex, onSelect }) {
+function SearchSongList({ songs, currentIndex, onSelect, hideSettings }) {
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
 
-  // Filter songs
   const filtered = songs.filter((s) =>
     s.name.toLowerCase().includes(query.toLowerCase())
   );
 
-  // Download helper
   async function downloadSong(song) {
     try {
       const response = await fetch(
@@ -39,7 +36,6 @@ function SearchSongList({ songs, currentIndex, onSelect }) {
 
   return (
     <div style={{ width: "100%", maxWidth: "600px", marginBottom: "20px" }}>
-      {/* Main Search Box - hides once overlay is open */}
       {!searchOpen && (
         <input
           type="text"
@@ -60,81 +56,58 @@ function SearchSongList({ songs, currentIndex, onSelect }) {
         />
       )}
 
-      {/* Search overlay */}
       {searchOpen && (
         <div
           style={{
-            position: "absolute",
-            top: "10px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "90%",
-            maxWidth: "600px",
-            maxHeight: "300px",
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            background: "rgba(0,0,0,0.8)",
+            zIndex: 1000,
             overflowY: "auto",
-            background: "#fff",
-            border: "1px solid #ccc",
-            borderRadius: "24px",
-            padding: "15px",
-            zIndex: 999,
-            boxShadow: "4px 4px 8px rgba(0,0,0,0.1)",
+            padding: "20px",
+            boxSizing: "border-box",
           }}
         >
-          {/* Overlay Header */}
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "2px",
-            }}
-          >
-            {/* Search input inside overlay */}
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
             <input
               type="text"
               placeholder="Search songs..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               style={{
-                flex: 1,
+                width: "80%",
                 padding: "8px 10px",
                 borderRadius: "8px",
                 border: "1px solid #ccc",
                 outline: "none",
                 color: "#22c55e",
-                marginRight: "10px",
               }}
               autoFocus
             />
-            {/* Close button */}
             <button
               onClick={() => {
                 setSearchOpen(false);
                 setQuery("");
               }}
               style={{
+                marginLeft: "10px",
                 border: "none",
                 background: "transparent",
-                fontSize: "14px",
+                fontSize: "24px",
                 cursor: "pointer",
-                color: "#888",
+                color: "#fff",
               }}
             >
               ✖
             </button>
           </div>
 
-          {/* Song list */}
-          <div
-            style={{
-              maxHeight: "280px",
-              overflowY: "auto",
-              scrollbarWidth: "thin",
-              scrollbarColor: "#ccc transparent",
-            }}
-          >
+          <div>
             {filtered.length === 0 ? (
-              <p style={{ textAlign: "center", color: "#666" }}>No songs found</p>
+              <p style={{ textAlign: "center", color: "#ccc" }}>No songs found</p>
             ) : (
               filtered.map((song) => (
                 <div
@@ -143,33 +116,22 @@ function SearchSongList({ songs, currentIndex, onSelect }) {
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    padding: "6px 0",
+                    padding: "10px",
                     cursor: "pointer",
-                    borderBottom: "1px solid #eee",
+                    borderBottom: "1px solid #444",
+                    color: "#fff",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = "#22c55e")}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                  onClick={() => {
+                    onSelect(songs.indexOf(song));
+                    setSearchOpen(false);
+                    setQuery("");
                   }}
                 >
-                  {/* Song Name */}
-                  <span
-                    onClick={() => {
-                      onSelect(songs.indexOf(song));
-                      setSearchOpen(false);
-                      setQuery("");
-                    }}
-                    style={{
-                      flex: 1,
-                      marginRight: "10px",
-                      color:
-                        songs.indexOf(song) === currentIndex
-                          ? "#22c55e"
-                          : "#000",
-                      fontWeight:
-                        songs.indexOf(song) === currentIndex ? "bold" : "normal",
-                    }}
-                  >
+                  <span style={{ flex: 1, marginRight: "10px" }}>
                     {song.name}
                   </span>
-
-                  {/* Download Button */}
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
