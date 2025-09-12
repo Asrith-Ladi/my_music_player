@@ -75,7 +75,7 @@ def fast_stream_from_drive(file_id):
     with requests.get(download_url, headers=headers, stream=True) as r:
         r.raise_for_status()
         with open(cache_path, "wb") as cache_file:
-            for chunk in r.iter_content(chunk_size=1024 * 64):  # 256KB chunks
+            for chunk in r.iter_content(chunk_size=1024 * 64):  # 64KB chunks
                 if chunk:
                     cache_file.write(chunk)
                     yield chunk
